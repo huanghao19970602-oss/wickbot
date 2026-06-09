@@ -1,0 +1,22 @@
+# ============================================================
+# 团队管理 Telegram Bot — Python 依赖文件
+# 安装命令：pip install -r requirements.txt
+# ============================================================
+
+# Telegram Bot 框架
+python-telegram-bot==21.9
+
+# 环境变量加载（从 .env 文件读取配置）
+python-decouple==3.8
+
+# HTTP 请求库（调用 DeepSeek API）
+requests==2.32.3
+
+# ============================================================
+# 说明：
+# - python-telegram-bot 是 Telegram 官方推荐的 Python Bot 库
+# - python-decouple 用来安全地从 .env 文件读取 Token 和 API Key
+# - requests 用来调用 DeepSeek 的 HTTP API
+# 
+# 所有依赖都是纯 Python，无需额外安装数据库或系统软件
+# ============================================================
