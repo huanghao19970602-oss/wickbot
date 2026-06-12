@@ -12,7 +12,7 @@ from database import (
     get_week_reports, get_all_users, set_user_role,
     get_user_role, save_okr, get_all_okrs, get_user_okr
 )
-from deepseek_client import summarize_reports, analyze_member
+from deepseek_client import summarize_daily_reports, analyze_member
 
 logger = logging.getLogger(__name__)
 
@@ -165,7 +165,12 @@ async def summary_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("📭 最近一周还没有任何日报记录。")
         return
 
-    summary = summarize_reports(reports)
+    # 把日报列表转成 AI 能读的文本格式
+    reports_text = "\n".join(
+        f"【{r['username']}】完成：{r['completed']} | 计划：{r['planned']} | 阻塞：{r['blockers']}"
+        for r in reports
+    )
+    summary = summarize_daily_reports(reports_text)
 
     await update.message.reply_text(
         f"📊 AI 团队工作汇总（最近一周）\n\n{summary}\n\n"
@@ -252,7 +257,12 @@ async def analyze_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"📭 {username} 最近没有足够的日报数据可供分析（需至少 3 条）。")
         return
 
-    analysis = analyze_member(username, reports)
+    # 把日报列表转成 AI 能读的文本格式
+    reports_text = "\n".join(
+        f"日期：{r['report_date']} | 完成：{r['completed']} | 计划：{r['planned']} | 阻塞：{r['blockers']}"
+        for r in reports
+    )
+    analysis = analyze_member(username, reports_text)
 
     await update.message.reply_text(
         f"🔍 AI 工作表现分析：{username}\n\n{analysis}\n\n"
